@@ -121,18 +121,18 @@ lib.mapAttrs (_: func: lib.makeOverridable func) {
     in
     # Assert that we have at least one URL
     assert urls' != [ ]; runCommand file
-      {
+      ({
         nativeBuildInputs = [ python3 ];
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
         outputHashMode = "flat";
         outputHashAlgo = "sha256";
         outputHash = hash;
-        NETRC = netrc_file;
         passthru = {
           isWheel = lib.strings.hasSuffix "whl" file; # Poetry2nix compat
           urls = urls';
         };
       }
+      // (lib.optionalAttrs (netrc_file != null) { NETRC = netrc_file; })
       ''
         python ${./fetch-from-legacy.py} ${lib.concatStringsSep " " (map (url: "--url ${lib.escapeShellArg url}") urls')} --pname ${pname} --filename ${file}
         mv ${file} $out
