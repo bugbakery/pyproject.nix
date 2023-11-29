@@ -117,7 +117,7 @@ lib.mapAttrs (_: func: lib.makeOverridable func) {
       netrc_file =
         if (pathParts != [ ])
         then (head pathParts).path
-        else "";
+        else null;
     in
     # Assert that we have at least one URL
     assert urls' != [ ]; runCommand file
