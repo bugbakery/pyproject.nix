@@ -121,7 +121,7 @@ lib.mapAttrs (_: func: lib.makeOverridable func) {
     in
     # Assert that we have at least one URL
     assert urls' != [ ]; runCommand file
-      ({
+      {
         nativeBuildInputs = [ python3 ];
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
         outputHashMode = "flat";
