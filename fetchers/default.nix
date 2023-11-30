@@ -121,6 +121,7 @@ lib.mapAttrs (_: func: lib.makeOverridable func) {
     in
     # Assert that we have at least one URL
     assert urls' != [ ]; runCommand file
+      (
       {
         nativeBuildInputs = [ python3 ];
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
@@ -133,6 +134,7 @@ lib.mapAttrs (_: func: lib.makeOverridable func) {
         };
       }
       // (lib.optionalAttrs (netrc_file != null) { NETRC = netrc_file; })
+      )
       ''
         python ${./fetch-from-legacy.py} ${lib.concatStringsSep " " (map (url: "--url ${lib.escapeShellArg url}") urls')} --pname ${pname} --filename ${file}
         mv ${file} $out
